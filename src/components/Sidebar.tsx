@@ -113,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 			</div>
 
 			{/* Main content */}
-			<div className="flex-grow bg-gray-100">
+			<div className="flex-grow bg-gray-100 overflow-auto h-full">
 				<div className=" animate-fadeIn transition-all duration-500">
 					{children}
 				</div>
