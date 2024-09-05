@@ -8,6 +8,7 @@ import { RiCalendarScheduleLine } from 'react-icons/ri';
 import { GoInbox } from 'react-icons/go';
 import { TbBrandGoogleAnalytics } from 'react-icons/tb';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import Image from 'next/image';
 
 interface Link {
 	icon: React.ComponentType; // Use this type for icon components
@@ -52,7 +53,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 						<div className="flex items-center gap-2">
 							<div className="avatar">
 								<div className="w-[2.2rem] rounded-full">
-									<img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+									<Image
+										width={20}
+										height={20}
+										alt="text"
+										src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+									/>
 								</div>
 							</div>
 							<p className="font-sans text-[#000000] font-[500]">

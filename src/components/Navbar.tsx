@@ -1,7 +1,8 @@
 import React from 'react';
-import { BiDownArrow, BiInfoCircle, BiSearch } from 'react-icons/bi';
+import { BiInfoCircle, BiSearch } from 'react-icons/bi';
 import { HiOutlineBellAlert } from 'react-icons/hi2';
 import { GoChevronDown } from 'react-icons/go';
+import Image from 'next/image';
 
 const Navbar = () => {
 	return (
@@ -38,8 +39,10 @@ const Navbar = () => {
 							className="btn btn-ghost btn-circle avatar "
 						>
 							<div className="w-7 rounded-full">
-								<img
-									alt="Tailwind CSS Navbar component"
+								<Image
+									width={20}
+									height={20}
+									alt="text"
 									src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
 								/>
 							</div>
