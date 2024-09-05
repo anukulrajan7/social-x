@@ -85,7 +85,6 @@ const CustomCalendar: React.FC = () => {
 		}
 
 		if (view === 'weekly') {
-			const days = [];
 			const timeSlots = Array.from({ length: 24 }, (_, index) => index); // 24-hour time slots
 
 			// Create day headers for the top row (x-axis)
@@ -236,7 +235,10 @@ const CustomCalendar: React.FC = () => {
 							onClick={() => setCurrentDate(subMonths(currentDate, 1))}
 							className="border-[#E6E6E6] border-[1px] h-[24px] w-[24px] flex justify-center items-center rounded-md shadow-sm "
 						>
-							<FaChevronLeft className="text-[#4B4652] text-sm" />
+							<FaChevronLeft
+								className="text-[#4B4652] text-sm"
+								onClick={() => setTypeView('')}
+							/>
 						</button>
 						<p className="text-[#1A1626] font-[500] text-[14px]">
 							16-25 Aug 2024
@@ -309,7 +311,6 @@ const CustomCalendar: React.FC = () => {
 			{shareModal && (
 				<div className="modal modal-open bg-white">
 					<div className="modal-box bg-white w-[25vw] relative py-1 flex flex-col gap-3">
-						'
 						<div
 							onClick={() => {
 								setShareModal(false);
