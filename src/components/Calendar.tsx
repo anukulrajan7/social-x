@@ -21,6 +21,7 @@ import { BsWhatsapp } from 'react-icons/bs';
 import { FaFacebook } from 'react-icons/fa';
 import { BiCopy } from 'react-icons/bi';
 import { RxCross1 } from 'react-icons/rx';
+import Calendar from './CalendarModal';
 
 interface Event {
 	id: number;
@@ -32,6 +33,7 @@ const CustomCalendar: React.FC = () => {
 	const [view, setView] = useState<string>('monthly');
 	const [typeView, setTypeView] = useState<string>('Calendar View');
 	const [shareModal, setShareModal] = useState<boolean>(false);
+	const [showCalendar, setShowCalendar] = useState(false);
 	const [currentDate, setCurrentDate] = useState<Date>(new Date());
 	const [events, setEvents] = useState<Event[]>([]);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -85,7 +87,7 @@ const CustomCalendar: React.FC = () => {
 		}
 
 		if (view === 'weekly') {
-			const timeSlots = Array.from({ length: 24 }, (_, index) => index); // 24-hour time slots
+			const timeSlots = Array.from({ length: 10 }, (_, index) => index); // 24-hour time slots
 
 			// Create day headers for the top row (x-axis)
 			const dayHeaders = [];
@@ -108,7 +110,7 @@ const CustomCalendar: React.FC = () => {
 			// Create grid cells for time slots
 			const gridCells = timeSlots.map((hour) => (
 				<div key={hour} className="border p-2">
-					{`${hour}:00`}
+					{`${hour + 9}:00`}
 				</div>
 			));
 
@@ -240,7 +242,10 @@ const CustomCalendar: React.FC = () => {
 								onClick={() => setTypeView('')}
 							/>
 						</button>
-						<p className="text-[#1A1626] font-[500] text-[14px]">
+						<p
+							className="text-[#1A1626] font-[500] text-[14px]"
+							onClick={() => setShowCalendar(true)}
+						>
 							16-25 Aug 2024
 						</p>
 						<button
@@ -258,7 +263,7 @@ const CustomCalendar: React.FC = () => {
 					<div>
 						<div
 							role="tablist"
-							className="tabs flex border-[2px] border-[#E6E6E6]  rounded-md items-center gap-2 py-1"
+							className="tabs flex border-[1px] border-[#E6E6E6]  rounded-md items-center gap-2 py-1"
 						>
 							{['daily', 'weekly', 'monthly'].map((type, index) => {
 								return (
@@ -267,9 +272,9 @@ const CustomCalendar: React.FC = () => {
 										key={index}
 										className={`${
 											view == type
-												? 'bg-[#8CA8FD] rounded-md px-4 py-1 text-sm text-[#4C6AF2]  capitalize'
+												? 'bg-[#EBF1FD] rounded-md  py-[.4rem] text-sm text-[#4C6AF2] border-[1px] border-[#8CA8FD] capitalize'
 												: 'mx-2 my-1 text-[#726E7A] capitalize text-sm'
-										}`}
+										} px-5`}
 										onClick={() => {
 											setView(type);
 										}}
@@ -310,7 +315,7 @@ const CustomCalendar: React.FC = () => {
 			)}
 			{shareModal && (
 				<div className="modal modal-open bg-white">
-					<div className="modal-box bg-white w-[25vw] relative py-1 flex flex-col gap-3">
+					<div className="modal-box bg-white w-[25vw] relative py-3 flex flex-col gap-3">
 						<div
 							onClick={() => {
 								setShareModal(false);
@@ -373,6 +378,18 @@ const CustomCalendar: React.FC = () => {
 								<span>Copy link</span>
 							</button>
 						</div>
+					</div>
+				</div>
+			)}
+			{showCalendar && (
+				<div
+					className="modal modal-open bg-white"
+					onClick={() => {
+						setShowCalendar(false);
+					}}
+				>
+					<div className="modal-box bg-white w-[25vw] relative py-1 flex flex-col gap-3">
+						<Calendar />
 					</div>
 				</div>
 			)}
