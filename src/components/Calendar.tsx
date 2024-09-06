@@ -1,33 +1,18 @@
 'use client';
 import React, { useState } from 'react';
-import {
-	format,
-	addDays,
-	startOfWeek,
-	endOfWeek,
-	startOfMonth,
-	endOfMonth,
-	addMonths,
-	subMonths,
-	addHours,
-} from 'date-fns';
+import { addMonths, subMonths } from 'date-fns';
 import { RiCalendarScheduleLine } from 'react-icons/ri';
 import { FaChevronRight } from 'react-icons/fa6';
 import { FaChevronLeft } from 'react-icons/fa6';
-
 import { IoMdShare } from 'react-icons/io';
-import { Modal } from './Modal'; // Reuse the modal component for adding/editing events
 import { BsWhatsapp } from 'react-icons/bs';
 import { FaFacebook } from 'react-icons/fa';
 import { BiCopy } from 'react-icons/bi';
 import { RxCross1 } from 'react-icons/rx';
 import Calendar from './CalendarModal';
-
-interface Event {
-	id: number;
-	date: string;
-	title: string;
-}
+import MonthlyView from './monthly';
+import WeeklyCalendar from './weekly';
+import DailyView from './Daily';
 
 const CustomCalendar: React.FC = () => {
 	const [view, setView] = useState<string>('monthly');
@@ -35,166 +20,6 @@ const CustomCalendar: React.FC = () => {
 	const [shareModal, setShareModal] = useState<boolean>(false);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [currentDate, setCurrentDate] = useState<Date>(new Date());
-	const [events, setEvents] = useState<Event[]>([]);
-	const [modalOpen, setModalOpen] = useState(false);
-	const [eventData, setEventData] = useState<Event>({
-		id: 0,
-		date: '',
-		title: '',
-	});
-
-	// Utility functions
-	const startOfCurrentWeek = startOfWeek(currentDate);
-	const endOfCurrentWeek = endOfWeek(currentDate);
-	const startOfCurrentMonth = startOfMonth(currentDate);
-	const endOfCurrentMonth = endOfMonth(currentDate);
-
-	const handleDateClick = (date: Date) => {
-		setEventData({ id: Math.random(), date: date.toISOString(), title: '' });
-		setModalOpen(true);
-	};
-
-	const handleAddEvent = () => {
-		setEvents([...events, eventData]);
-		setModalOpen(false);
-	};
-
-	const renderGrid = () => {
-		if (view === 'daily') {
-			return (
-				<div className="grid grid-cols-1 gap-4 p-4 border rounded bg-white">
-					<div
-						className="border p-4"
-						onClick={() => handleDateClick(currentDate)}
-					>
-						<h3 className="font-bold">{format(currentDate, 'EEEE, MMM dd')}</h3>
-						<div>
-							{events
-								.filter(
-									(event) =>
-										format(new Date(event.date), 'yyyy-MM-dd') ===
-										format(currentDate, 'yyyy-MM-dd')
-								)
-								.map((event) => (
-									<div key={event.id} className="mt-2 p-2 bg-blue-100 rounded">
-										{event.title}
-									</div>
-								))}
-						</div>
-					</div>
-				</div>
-			);
-		}
-
-		if (view === 'weekly') {
-			const timeSlots = Array.from({ length: 10 }, (_, index) => index); // 24-hour time slots
-
-			// Create day headers for the top row (x-axis)
-			const dayHeaders = [];
-			for (
-				let date = startOfCurrentWeek;
-				date <= endOfCurrentWeek;
-				date = addDays(date, 1)
-			) {
-				dayHeaders.push(
-					<div
-						key={date.toISOString()}
-						className="border p-4 bg-white text-center"
-					>
-						<h3 className="font-bold">{format(date, 'EEEE')}</h3>
-						<p>{format(date, 'MMM dd')}</p>
-					</div>
-				);
-			}
-
-			// Create grid cells for time slots
-			const gridCells = timeSlots.map((hour) => (
-				<div key={hour} className="border p-2">
-					{`${hour + 9}:00`}
-				</div>
-			));
-
-			// Create cells for each day at each time slot
-			const dayCells = [];
-			for (
-				let date = startOfCurrentWeek;
-				date <= endOfCurrentWeek;
-				date = addDays(date, 1)
-			) {
-				for (let hour = 0; hour < 24; hour++) {
-					const currentDateTime = addHours(new Date(date), hour);
-					dayCells.push(
-						<div
-							key={`${date.toISOString()}-${hour}`}
-							className="border p-4 cursor-pointer bg-white"
-							onClick={() => handleDateClick(currentDateTime)}
-						>
-							{events
-								.filter(
-									(event) =>
-										format(new Date(event.date), 'yyyy-MM-dd HH') ===
-										format(currentDateTime, 'yyyy-MM-dd HH')
-								)
-								.map((event) => (
-									<div key={event.id} className="mt-2 p-2 bg-blue-100 rounded">
-										{event.title}
-									</div>
-								))}
-						</div>
-					);
-				}
-			}
-
-			// Render the calendar grid
-			return (
-				<div>
-					{/* Top row with day names */}
-					<div className="grid grid-cols-8 border">
-						<div className="p-4 bg-white" /> {dayHeaders}
-					</div>
-
-					{/* Grid with time slots and day cells */}
-					<div className="grid grid-cols-8">
-						<div className="grid grid-rows-24">{gridCells}</div>{' '}
-						{/* Time slot labels (y-axis) */}
-						<div className="col-span-7 grid grid-cols-7 grid-rows-24">
-							{dayCells}
-						</div>{' '}
-						{/* Day x-axis and time y-axis */}
-					</div>
-				</div>
-			);
-		}
-
-		if (view === 'monthly') {
-			const days = [];
-			let date = startOfCurrentMonth;
-			while (date <= endOfCurrentMonth) {
-				days.push(
-					<div
-						key={date.toISOString()}
-						className="border p-4 cursor-pointer bg-white"
-						onClick={() => handleDateClick(date)}
-					>
-						<h3 className="font-bold">{format(date, 'MMM dd')}</h3>
-						{events
-							.filter(
-								(event) =>
-									format(new Date(event.date), 'yyyy-MM-dd') ===
-									format(date, 'yyyy-MM-dd')
-							)
-							.map((event) => (
-								<div key={event.id} className="mt-2 p-2 bg-blue-100 rounded">
-									{event.title}
-								</div>
-							))}
-					</div>
-				);
-				date = addDays(date, 1);
-			}
-			return <div className="grid grid-cols-7 gap-4">{days}</div>;
-		}
-	};
 
 	return (
 		<div className="p-6 bg-white rounded-md shadow-sm flex flex-col h-full">
@@ -287,32 +112,7 @@ const CustomCalendar: React.FC = () => {
 					</div>
 				</div>{' '}
 			</div>
-			{/* Calendar Grid */}
-			{renderGrid()}
-
-			{/* Modal for event creation */}
-			{modalOpen && (
-				<Modal
-					title={`Add Event for ${format(
-						new Date(eventData.date),
-						'dd MMM yyyy'
-					)}`}
-					onClose={() => setModalOpen(false)}
-					onSubmit={handleAddEvent}
-				>
-					<div className="form-control">
-						<label className="label">Title</label>
-						<input
-							type="text"
-							className="input input-bordered"
-							value={eventData.title}
-							onChange={(e) =>
-								setEventData({ ...eventData, title: e.target.value })
-							}
-						/>
-					</div>
-				</Modal>
-			)}
+			{view === ''}
 			{shareModal && (
 				<div className="modal modal-open bg-white">
 					<div className="modal-box bg-white w-[25vw] relative py-3 flex flex-col gap-3">
@@ -381,6 +181,9 @@ const CustomCalendar: React.FC = () => {
 					</div>
 				</div>
 			)}
+			{'monthly' === view && <MonthlyView />}
+			{'weekly' === view && <WeeklyCalendar today={currentDate} />}
+			{'daily' === view && <DailyView />}
 			{showCalendar && (
 				<div
 					className="modal modal-open bg-white"
