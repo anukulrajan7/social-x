@@ -182,8 +182,8 @@ const Topbar = () => {
 								<p className="text-sm text-[#34303B] text-start">
 									Choosing the right draft is crucial for ensuring your content
 									meets the highest standards. Begin by selecting one of your
-									drafts that best aligns with your goals, then click 'Import'
-									ensure it’s ready for final review,{' '}
+									drafts that best aligns with your goals, then click Import
+									ensure its ready for final review.
 									<span className="text-[#5E17EB]">
 										#hoou #time #and #enhancing #quality.
 									</span>
