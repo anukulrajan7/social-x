@@ -31,10 +31,8 @@ const WeeklyCalendar: React.FC<WeeklyCalendarProps> = ({ today }) => {
 		start: startOfWeek(today),
 		end: endOfWeek(today),
 	});
-	const [isToday, setIsToday] = useState<boolean>(false);
 
 	useEffect(() => {
-		setIsToday(isTodayDate(today));
 		setCurrentWeek({
 			start: startOfWeek(today),
 			end: endOfWeek(today),
