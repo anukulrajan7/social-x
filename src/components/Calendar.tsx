@@ -181,9 +181,9 @@ const CustomCalendar: React.FC = () => {
 					</div>
 				</div>
 			)}
-			{'monthly' === view && <MonthlyView />}
+			{'monthly' === view && <MonthlyView today={currentDate} />}
 			{'weekly' === view && <WeeklyCalendar today={currentDate} />}
-			{'daily' === view && <DailyView />}
+			{'daily' === view && <DailyView today={currentDate} />}
 			{showCalendar && (
 				<div
 					className="modal modal-open bg-white"

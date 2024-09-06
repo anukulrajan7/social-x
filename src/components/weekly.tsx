@@ -5,7 +5,6 @@ import {
 	addDays,
 	startOfWeek,
 	endOfWeek,
-	getDate,
 	isToday as isTodayDate,
 } from 'date-fns';
 import { PiPlus } from 'react-icons/pi';
